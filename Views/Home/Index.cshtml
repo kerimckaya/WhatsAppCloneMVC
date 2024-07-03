@@ -51,7 +51,7 @@
         connection.start().then(() => {
 
             $.each(JSON.parse('@Html.Raw(ViewBag.UserList)'), function (k,v) {
-                const userId =v.Username;
+                const userId = v.ConnectionId;
                 const userListItem = document.createElement("a");
                 userListItem.href = "#";
                 userListItem.classList.add("list-group-item", "list-group-item-action");
@@ -67,7 +67,7 @@
         function sendMessageToUser() {
             const targetUserId = document.getElementById("targetUserIdInput").value;
             const message = document.getElementById("messageInput").value;
-            connection.invoke("SendMessageToUser", targetUserId, message).catch(err => console.error(err.toString()));
+            connection.invoke("SendMessageToUser", targetUserId, message, localStorage.token).catch(err => console.error(err.toString()));
         }
     </script>
 }

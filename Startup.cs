@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using BaseAPI.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -37,6 +39,14 @@ public class Startup
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("your_secret_key_here"))
                 };
             });
+        services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+           .AddCookie(option =>
+           {
+               option.ExpireTimeSpan = TimeSpan.FromDays(3);
+               option.LoginPath = "/Auth/Login";
+               option.AccessDeniedPath = "/Auth/Login";
+           });
+        services.AddScoped<IUserService, UserService>();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
